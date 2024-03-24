@@ -1,3 +1,4 @@
+import 'package:dotenv/dotenv.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:stock_data_retriever/stock_data_retriever.dart'
     as stock_data_retriever;
@@ -5,6 +6,8 @@ import 'model/stock_data.dart';
 import 'repository/mysql_stock_database.dart';
 
 void main(List<String> arguments) async {
+  var env = DotEnv(includePlatformEnvironment: true)..load();
+
   // final yfin = YahooFin();
   // final ticker = "3679.T";
 
@@ -29,12 +32,12 @@ void main(List<String> arguments) async {
   // print(chart.chartQuotes!.timestamp);
 
   final pool = MySQLConnectionPool(
-    host: "192.168.3.103",
-    port: 3306,
-    userName: "stock_data_user",
-    password: "stockdatauser",
+    host: env["SQL_HOST"]!,
+    port: int.parse(env["SQL_PORT"]!),
+    userName: env["SQL_USER"]!,
+    password: env["SQL_PASS"]!,
     maxConnections: 10,
-    databaseName: "stock_data", // optional,
+    databaseName: env["SQL_DATABASE_NAME"]!,
   );
 
   final mysqlRepo = MySqlStockDataBase(pool: pool);
@@ -46,7 +49,7 @@ void main(List<String> arguments) async {
     high: 200.0,
     low: 50.0,
     close: 150.0,
-    volume: null,
+    volume: 12345,
   );
 
   final result = await mysqlRepo.insertStock(addData);

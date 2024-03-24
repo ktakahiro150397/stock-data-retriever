@@ -8,6 +8,7 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  dotenv: ^4.2.0
   mysql1: ^0.20.0
   mysql_client: ^0.0.27
   yahoofin: ^0.0.8
