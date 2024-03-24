@@ -1,7 +1,8 @@
 import 'package:mysql_client/mysql_client.dart';
 import 'package:stock_data_retriever/stock_data_retriever.dart'
     as stock_data_retriever;
-import 'package:yahoofin/yahoofin.dart';
+import 'model/stock_data.dart';
+import 'repository/mysql_stock_database.dart';
 
 void main(List<String> arguments) async {
   // final yfin = YahooFin();
@@ -36,7 +37,19 @@ void main(List<String> arguments) async {
     databaseName: "stock_data", // optional,
   );
 
-  var result = await pool.execute("show tables;");
+  final mysqlRepo = MySqlStockDataBase(pool: pool);
+
+  final addData = StockData(
+    ticker: "1234",
+    timestamp: DateTime.now(),
+    open: 100.0,
+    high: 200.0,
+    low: 50.0,
+    close: 150.0,
+    volume: null,
+  );
+
+  final result = await mysqlRepo.insertStock(addData);
 
   // final conn = await MySqlConnection.connect(ConnectionSettings(
   //   host: "192.168.3.103",
