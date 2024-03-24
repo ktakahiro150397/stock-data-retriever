@@ -42,4 +42,18 @@ INSERT INTO `stock_data`.`stock_data` (
 """, values)
         });
   }
+
+  @override
+  Future clearStocks(String ticker) async {
+    final values = {
+      "stock_symbol": ticker,
+    };
+
+    return await pool.transactional((conn) async => {
+          await conn.execute("""
+DELETE FROM `stock_data`.`stock_data`
+WHERE `symbol` = :stock_symbol;
+""", values)
+        });
+  }
 }
